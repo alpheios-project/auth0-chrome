@@ -79,6 +79,12 @@ class PKCEClient{
     const code = this.extractCode(resultUrl);
     return this.exchangeCodeForToken(code, secret);
   }
+
+  @boundMethod
+  async logout (options = {}, interactive = true) {
+    const url = `https://${domain}/logout?${qs.stringify(options)}`;
+    const resultUrl = await this.getAuthResult(url, interactive);
+  }
 }
 
 export default PKCEClient;
