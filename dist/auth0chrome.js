@@ -25219,8 +25219,9 @@ function () {
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var options,
             interactive,
+            domain,
+            clientId,
             url,
-            resultUrl,
             _args4 = arguments;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
@@ -25228,14 +25229,15 @@ function () {
               case 0:
                 options = _args4.length > 0 && _args4[0] !== undefined ? _args4[0] : {};
                 interactive = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : true;
+                domain = this.domain, clientId = this.clientId;
                 url = "https://".concat(domain, "/logout?").concat(qs.stringify(options));
-                _context4.next = 5;
+                _context4.next = 6;
                 return this.getAuthResult(url, interactive);
 
-              case 5:
-                resultUrl = _context4.sent;
-
               case 6:
+                return _context4.abrupt("return");
+
+              case 7:
               case "end":
                 return _context4.stop();
             }
