@@ -159,10 +159,16 @@ Your `main.js` file is where you should add the listener for the `logout` event.
 chrome.runtime.onMessage.addListener(function (event) {
   if (event.type === 'logout') {
 
-    // returnTo - url to redirect the user to after logout. If this is not specified you will get default page back from AuthO with the status of the request.
-    //            this url must be configured as an Allowed Logout URL in your Auth0 configuration.
-    // client_id - client_id of your Auth0 account. Whether or not to specify this and the impact of how it affects the returnTo URL are explained further
-    //             at https://auth0.com/docs/logout
+    // returnTo - Url to redirect the user to after logout. 
+    //            If this is not specified you will get default page 
+    //            back from AuthO with the status of the request.
+    //            This url must be configured as an Allowed Logout URL 
+    //            in your Auth0 configuration.
+    // client_id - Auth0 Client Id
+    //
+    // Whether or not to specify the client_id the impact of how it affects 
+    // the returnTo URL and the Auth0 configuration requirements 
+    // are explained further at https://auth0.com/docs/logout
     let options = {
       returnTo: 'http://example.org/loggedout.html',
       client_id: env.AUTH0_CLIENT_ID
