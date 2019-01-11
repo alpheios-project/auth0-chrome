@@ -131,24 +131,74 @@ Auth0's hosted Lock widget will be displayed in a new window.
 
 ### Styling
 
-To apply styles to the login page, go to your Auth0 account and go to [Hosted Pages](https://manage.auth0.com/#/login_page). From there toggle "Customize Login Page", that will allow you to not only customize the Lock widget, but also apply some styling to the page. 
+To apply styles to the login page, go to your Auth0 account and go to [Hosted Pages](https://manage.auth0.com/#/login_page). From there toggle "Customize Login Page", that will allow you to not only customize the Lock widget, but also apply some styling to the page.
 
 To read more on this go to [Customize Your Hosted Page](https://auth0.com/docs/hosted-pages#customize-your-hosted-page).
+
+### Logout
+
+Somewhere in your browser action, create a **Log Out** button and when it is clicked, emit an event that can be picked up to trigger the logout request. For example, listen for click events with jQuery and emit a message called `logout` with `chrome.runtime.sendMessage`.
+
+```js
+// ...
+  $('.logout-button').addEventListener('click', () => {
+    $('.default').classList.add('hidden');
+    $('.loading').classList.remove('hidden');
+    chrome.runtime.sendMessage({
+      type: "logout"
+    });
+  });
+// ...
+```
+
+Your `main.js` file is where you should add the listener for the `logout` event. This is where you can instantiate `Auth0Chrome` and call the `logout` method.
+
+```js
+// src/main.js
+
+chrome.runtime.onMessage.addListener(function (event) {
+  if (event.type === 'logout') {
+
+    // returnTo - url to redirect the user to after logout. If this is not specified you will get default page back from AuthO with the status of the request.
+    //            this url must be configured as an Allowed Logout URL in your Auth0 configuration.
+    // client_id - client_id of your Auth0 account. Whether or not to specify this and the impact of how it affects the returnTo URL are explained further
+    //             at https://auth0.com/docs/logout
+    let options = {
+      returnTo: 'http://example.org/loggedout.html',
+      client_id: env.AUTH0_CLIENT_ID
+    };
+
+    new Auth0Chrome(env.AUTH0_DOMAIN, env.AUTH0_CLIENT_ID)
+      .logout(options)
+      .then(function () {
+        // you can do something here if you need to but
+        // the returnTo page will be displayed in a new window.
+      }).catch(function (err) {
+      chrome.notifications.create({
+        type: 'basic',
+        title: 'Logout Failed',
+        message: err.message,
+        iconUrl: 'icons/icon128.png'
+      });
+    });
+  }
+});
+```
 
 ## Using the Library
 
 
 ### `Auth0CLient(domain, clientId)`
 
-The library exposes `Auth0Client` which extends a generic `PKCEClient`. 
+The library exposes `Auth0Client` which extends a generic `PKCEClient`.
 
 - `domain` : Your Auth0 Domain, to create one please visit https://auth0.com/
-- `clientId`: The clientId for the chrome client, to create one 
+- `clientId`: The clientId for the chrome client, to create one
    - Visit https://manage.auth0.com/#/clients and click on  `+ Create Client`
    - Select "Native" as the client type
    - In the **Allowed Callback URLs** section, add `https://<yourchromeappid>.chromiumapps.org/auth0` as an allowed callback url
    - In the **Allowed Origins** section, add `chrome-extension://<yourchromeappid>`
-   
+
 ### `Promise <Object> Auth0Client#authenticate(options, interactive)`
 
 The `authenticate` method makes a call to the Authentication API and renders the log in UI if `userinteraction` is required. Upon completion, this method will resolve an object which will contain the requested token and meta information related to the authentication process.
