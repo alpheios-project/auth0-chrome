@@ -25230,7 +25230,7 @@ function () {
                 options = _args4.length > 0 && _args4[0] !== undefined ? _args4[0] : {};
                 interactive = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : true;
                 domain = this.domain, clientId = this.clientId;
-                url = "https://".concat(domain, "/logout?").concat(qs.stringify(options));
+                url = "https://".concat(domain, "/v2/logout?").concat(qs.stringify(options));
                 _context4.next = 6;
                 return this.getAuthResult(url, interactive);
 

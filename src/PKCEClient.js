@@ -83,7 +83,7 @@ class PKCEClient{
   @boundMethod
   async logout (options = {}, interactive = true) {
     const {domain, clientId} = this;
-    const url = `https://${domain}/logout?${qs.stringify(options)}`;
+    const url = `https://${domain}/v2/logout?${qs.stringify(options)}`;
     await this.getAuthResult(url, interactive);
     return
   }
