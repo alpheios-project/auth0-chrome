@@ -25248,7 +25248,7 @@ function () {
                 url = "https://".concat(domain, "/v2/logout");
                 _context4.prev = 6;
                 _context4.next = 9;
-                return this.getAuthResult(url, false);
+                return this.getAuthResult(url, interactive);
 
               case 9:
                 _context4.next = 15;

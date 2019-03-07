@@ -97,7 +97,7 @@ class PKCEClient{
     const {domain, clientId} = this;
     const url = `https://${domain}/v2/logout`;
     try {
-      await this.getAuthResult(url, false);
+      await this.getAuthResult(url, interactive);
     } catch (error) {
       if (error.message !== INTERACTION_MSG_CHROME && error.message !== INTERACTION_MSG_FF) {
         // This is an error that must be handled by the caller
