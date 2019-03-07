@@ -25039,7 +25039,6 @@ function _applyDecoratedDescriptor(target, property, decorators, descriptor, con
 
 
 var qs = url_parse__WEBPACK_IMPORTED_MODULE_2___default.a.qs;
-console.log(qs);
 /*
   Generic JavaScript PKCE Client, you can subclass this for React-Native,
   Cordova, Chrome, Some Other Environment which has its own handling for
@@ -25210,10 +25209,80 @@ function () {
 
       return authenticate;
     }()
+    /**
+     * Logs the user out using the same `identity.launchWebAuthFlow()` that was used for logging in.
+     * Implemented according to a suggestion from
+     * https://stackoverflow.com/questions/26080632/how-do-i-log-out-of-a-chrome-identity-oauth-provider
+     * In order to not show any logout pages, default value of `interactive` is set to `false`.
+     * This call, however, produces a user interaction error.
+     * As this, in the context of this function, can be considered a "normal" outcome,
+     * we ignore errors with the user interaction message and resolve the promise as success.
+     * @param options
+     * @param interactive
+     * @return {Promise<void> | Promise<Error>}
+     */
+
+  }, {
+    key: "logout",
+    value: function () {
+      var _logout = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var options,
+            interactive,
+            INTERACTION_MSG_CHROME,
+            INTERACTION_MSG_FF,
+            domain,
+            clientId,
+            url,
+            _args4 = arguments;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                options = _args4.length > 0 && _args4[0] !== undefined ? _args4[0] : {};
+                interactive = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : false;
+                INTERACTION_MSG_CHROME = "User interaction required.";
+                INTERACTION_MSG_FF = "Requires user interaction";
+                domain = this.domain, clientId = this.clientId;
+                url = "https://".concat(domain, "/v2/logout");
+                _context4.prev = 6;
+                _context4.next = 9;
+                return this.getAuthResult(url, false);
+
+              case 9:
+                _context4.next = 15;
+                break;
+
+              case 11:
+                _context4.prev = 11;
+                _context4.t0 = _context4["catch"](6);
+
+                if (!(_context4.t0.message !== INTERACTION_MSG_CHROME && _context4.t0.message !== INTERACTION_MSG_FF)) {
+                  _context4.next = 15;
+                  break;
+                }
+
+                throw _context4.t0;
+
+              case 15:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this, [[6, 11]]);
+      }));
+
+      function logout() {
+        return _logout.apply(this, arguments);
+      }
+
+      return logout;
+    }()
   }]);
 
   return PKCEClient;
-}(), (_applyDecoratedDescriptor(_class.prototype, "exchangeCodeForToken", [autobind_decorator__WEBPACK_IMPORTED_MODULE_3__["boundMethod"]], Object.getOwnPropertyDescriptor(_class.prototype, "exchangeCodeForToken"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "authenticate", [autobind_decorator__WEBPACK_IMPORTED_MODULE_3__["boundMethod"]], Object.getOwnPropertyDescriptor(_class.prototype, "authenticate"), _class.prototype)), _class);
+}(), (_applyDecoratedDescriptor(_class.prototype, "exchangeCodeForToken", [autobind_decorator__WEBPACK_IMPORTED_MODULE_3__["boundMethod"]], Object.getOwnPropertyDescriptor(_class.prototype, "exchangeCodeForToken"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "authenticate", [autobind_decorator__WEBPACK_IMPORTED_MODULE_3__["boundMethod"]], Object.getOwnPropertyDescriptor(_class.prototype, "authenticate"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "logout", [autobind_decorator__WEBPACK_IMPORTED_MODULE_3__["boundMethod"]], Object.getOwnPropertyDescriptor(_class.prototype, "logout"), _class.prototype)), _class);
 /* harmony default export */ __webpack_exports__["default"] = (PKCEClient);
 
 /***/ }),

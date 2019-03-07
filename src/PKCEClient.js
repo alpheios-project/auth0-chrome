@@ -4,7 +4,6 @@ import parse from 'url-parse';
 import { boundMethod } from 'autobind-decorator'
 
 const qs = parse.qs;
-console.log(qs);
 /*
   Generic JavaScript PKCE Client, you can subclass this for React-Native,
   Cordova, Chrome, Some Other Environment which has its own handling for
@@ -77,6 +76,34 @@ class PKCEClient{
     const resultUrl = await this.getAuthResult(url, interactive);
     const code = this.extractCode(resultUrl);
     return this.exchangeCodeForToken(code, secret);
+  }
+
+  /**
+   * Logs the user out using the same `identity.launchWebAuthFlow()` that was used for logging in.
+   * Implemented according to a suggestion from
+   * https://stackoverflow.com/questions/26080632/how-do-i-log-out-of-a-chrome-identity-oauth-provider
+   * In order to not show any logout pages, default value of `interactive` is set to `false`.
+   * This call, however, produces a user interaction error.
+   * As this, in the context of this function, can be considered a "normal" outcome,
+   * we ignore errors with the user interaction message and resolve the promise as success.
+   * @param options
+   * @param interactive
+   * @return {Promise<void> | Promise<Error>}
+   */
+  @boundMethod
+  async logout (options = {}, interactive = false) {
+    const INTERACTION_MSG_CHROME = "User interaction required."
+    const INTERACTION_MSG_FF = "Requires user interaction"
+    const {domain, clientId} = this;
+    const url = `https://${domain}/v2/logout`;
+    try {
+      await this.getAuthResult(url, false);
+    } catch (error) {
+      if (error.message !== INTERACTION_MSG_CHROME && error.message !== INTERACTION_MSG_FF) {
+        // This is an error that must be handled by the caller
+        throw error
+      }
+    }
   }
 }
 
